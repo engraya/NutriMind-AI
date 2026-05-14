@@ -10,9 +10,9 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface GroceryItem {
-  name: string;
+  ingredient: string;
   quantity: string;
-  unit: string;
+  unit?: string;
   category: string;
   checked: boolean;
 }
@@ -96,7 +96,7 @@ export function GroceryListClient({ userId, activePlan, initialList }: GroceryLi
       .filter((cat) => list.items.some((i) => i.category === cat))
       .map((cat) => {
         const items = list.items.filter((i) => i.category === cat);
-        return `${cat}:\n${items.map((i) => `  - ${i.name}${i.quantity ? ` (${i.quantity}${i.unit ? " " + i.unit : ""})` : ""}`).join("\n")}`;
+        return `${cat}:\n${items.map((i) => `  - ${i.ingredient}${i.quantity ? ` (${i.quantity}${i.unit ? " " + i.unit : ""})` : ""}`).join("\n")}`;
       })
       .join("\n\n");
     navigator.clipboard.writeText(text);
@@ -233,7 +233,7 @@ export function GroceryListClient({ userId, activePlan, initialList }: GroceryLi
                   <div className="space-y-1">
                     {items.map((item, _) => {
                       const globalIndex = list.items.findIndex(
-                        (i) => i.name === item.name && i.category === item.category
+                        (i) => i.ingredient === item.ingredient && i.category === item.category
                       );
                       return (
                         <button
@@ -247,7 +247,7 @@ export function GroceryListClient({ userId, activePlan, initialList }: GroceryLi
                             <Square className="h-4 w-4 text-muted-foreground shrink-0" />
                           )}
                           <span className={`text-sm flex-1 ${item.checked ? "line-through text-muted-foreground" : ""}`}>
-                            {item.name}
+                            {item.ingredient}
                           </span>
                           {(item.quantity || item.unit) && (
                             <span className="text-xs text-muted-foreground">

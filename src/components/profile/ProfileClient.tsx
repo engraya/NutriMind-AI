@@ -126,7 +126,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (!data.success) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || "Failed to save profile");
       toast.success("Profile saved!");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save profile");

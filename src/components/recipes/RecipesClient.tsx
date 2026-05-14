@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { ChefHat, Loader2, Heart, Clock, Users, Filter } from "lucide-react";
@@ -60,16 +60,17 @@ export function RecipesClient({ userId, profile, initialSavedIds }: RecipesClien
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cuisine: cuisine === "Any" ? undefined : cuisine,
-          mealType: mealType === "Any" ? undefined : mealType,
+          cuisineFilter: cuisine === "Any" ? undefined : cuisine,
+          mealTypeFilter: mealType === "Any" ? undefined : mealType,
           diet: diet === "Any" ? undefined : diet,
           restrictions: profile?.dietary_restrictions ?? [],
           allergies: profile?.allergies ?? [],
           goal: profile?.goal ?? "general health",
+          count: 9,
         }),
       });
       const data = await res.json();
-      if (!data.success) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || "Failed to load recipes");
       setRecipes(data.recipes);
       setHasLoaded(true);
     } catch (error) {
@@ -78,6 +79,11 @@ export function RecipesClient({ userId, profile, initialSavedIds }: RecipesClien
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchRecipes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleSave = async (recipeId: string) => {
     const isSaved = savedIds.has(recipeId);
@@ -91,9 +97,11 @@ export function RecipesClient({ userId, profile, initialSavedIds }: RecipesClien
 
     try {
       if (isSaved) {
-        await fetch(`/api/recipes/${recipeId}`, { method: "DELETE" });
+        await fetch(`/api/recipes/${recipeId}/save`, { method: "DELETE" });
+        toast.success("Recipe removed from saved");
       } else {
         await fetch(`/api/recipes/${recipeId}/save`, { method: "POST" });
+        toast.success("Recipe saved!");
       }
     } catch {
       setSavedIds(savedIds); // revert on error

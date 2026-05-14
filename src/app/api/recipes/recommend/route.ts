@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { recommendRecipes } from "@/lib/gemini/recipes";
 import { searchRecipeImage } from "@/lib/nutrition/spoonacular";
 
@@ -49,29 +49,39 @@ export async function POST(request: Request) {
       })
     );
 
-    // Cache in Supabase (service role not needed — recipes are public-write from API routes)
-    for (const recipe of enriched) {
-      await supabase.from("recipes").insert({
-        title: recipe.title,
-        description: recipe.description,
-        image_url: recipe.image_url,
-        cuisine_type: recipe.cuisine_type,
-        meal_type: recipe.meal_type,
-        diet_tags: recipe.diet_tags,
-        prep_time_min: recipe.prep_time_min,
-        cook_time_min: recipe.cook_time_min,
-        servings: recipe.servings,
-        calories_per_serving: recipe.calories_per_serving,
-        protein_g: recipe.protein_g,
-        carbs_g: recipe.carbs_g,
-        fat_g: recipe.fat_g,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-        source: "gemini",
-      }).select().single();
-    }
+    // Cache in Supabase using service role (recipes table has no anon INSERT policy)
+    const serviceSupabase = createServiceClient();
+    const recipesWithIds = (
+      await Promise.all(
+        enriched.map(async (recipe) => {
+          const { data, error } = await serviceSupabase.from("recipes").insert({
+            title: recipe.title,
+            description: recipe.description,
+            image_url: recipe.image_url,
+            cuisine_type: recipe.cuisine_type,
+            meal_type: recipe.meal_type,
+            diet_tags: recipe.diet_tags,
+            prep_time_min: recipe.prep_time_min,
+            cook_time_min: recipe.cook_time_min,
+            servings: recipe.servings,
+            calories_per_serving: recipe.calories_per_serving,
+            protein_g: recipe.protein_g,
+            carbs_g: recipe.carbs_g,
+            fat_g: recipe.fat_g,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions,
+            source: "gemini",
+          }).select("id").single();
+          if (error || !data) {
+            console.error("Failed to insert recipe:", recipe.title, error?.message);
+            return null;
+          }
+          return { ...recipe, id: data.id };
+        })
+      )
+    ).filter((r): r is NonNullable<typeof r> => r !== null);
 
-    return NextResponse.json({ recipes: enriched });
+    return NextResponse.json({ recipes: recipesWithIds });
   } catch (error) {
     console.error("Recipe recommendation error:", error);
     return NextResponse.json({ error: "Failed to recommend recipes" }, { status: 500 });

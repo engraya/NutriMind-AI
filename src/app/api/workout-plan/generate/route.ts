@@ -24,19 +24,19 @@ Return a JSON object:
     {
       "day": "string (Monday-Sunday)",
       "focus": "string (e.g. Upper Body, Cardio, Rest)",
-      "duration_min": number,
+      "estimated_duration_min": number,
       "exercises": [
         {
           "name": "string",
           "sets": number,
           "reps": "string (e.g. '10-12' or '30 seconds')",
-          "rest_seconds": number,
+          "rest_sec": number,
           "notes": "string"
         }
       ]
     }
   ],
-  "weekly_notes": "string"
+  "notes": "string"
 }
 
 Include 1-2 rest days. For lose_weight focus on cardio + full body. For gain_muscle focus on strength splits. Respond with JSON only.`;

@@ -1,4 +1,4 @@
-import { geminiFlash } from "./client";
+import { genAI } from "./client";
 import type { ChatMessage, ChatUserContext } from "@/types/chat";
 
 function buildSystemInstruction(userContext: ChatUserContext): string {
@@ -35,10 +35,12 @@ export async function createChatStream(
 
   const lastMessage = messages[messages.length - 1];
 
-  const chat = geminiFlash.startChat({
-    history,
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3-flash-preview",
     systemInstruction,
   });
+
+  const chat = model.startChat({ history });
 
   const result = await chat.sendMessageStream(lastMessage.content);
 

@@ -21,7 +21,8 @@ interface Instruction {
   text: string;
 }
 
-export default async function RecipeDetailPage({ params }: { params: { recipeId: string } }) {
+export default async function RecipeDetailPage({ params }: { params: Promise<{ recipeId: string }> }) {
+  const { recipeId } = await params;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
@@ -29,7 +30,7 @@ export default async function RecipeDetailPage({ params }: { params: { recipeId:
   const { data: rawRecipe } = await supabase
     .from("recipes")
     .select("*")
-    .eq("id", params.recipeId)
+    .eq("id", recipeId)
     .single();
 
   const recipe = rawRecipe as Recipe | null;

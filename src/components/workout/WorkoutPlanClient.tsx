@@ -165,8 +165,12 @@ export function WorkoutPlanClient({ userId, profile, initialPlan }: WorkoutPlanC
         }),
       });
       const data = await res.json();
-      if (!data.success) throw new Error(data.error);
-      setPlan(data.plan);
+      if (!res.ok) throw new Error(data.error || "Failed to generate plan");
+      setPlan({
+        id: data.planId,
+        title: `Workout Plan — Week of ${new Date().toISOString().split("T")[0]}`,
+        plan_data: data.planData,
+      });
       toast.success("Workout plan generated!");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to generate plan");

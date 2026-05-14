@@ -23,7 +23,7 @@ const FEATURES = [
     title: "Fridge Scanner",
     description:
       "Photograph your fridge or pantry. AI identifies every ingredient and instantly suggests meals you can make right now.",
-    color: "bg-orange-500/10 text-orange-600",
+    color: "bg-teal-500/10 text-teal-600",
     tag: "AI Vision",
   },
   {
@@ -63,7 +63,7 @@ const FEATURES = [
     title: "Workout Plans",
     description:
       "AI-generated workout plans that align with your nutrition goals. Synced calorie targets for rest days vs training days.",
-    color: "bg-amber-500/10 text-amber-600",
+    color: "bg-indigo-500/10 text-indigo-600",
     tag: "Fitness",
   },
   {

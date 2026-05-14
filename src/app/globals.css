@@ -16,8 +16,8 @@
   --secondary-foreground: #18181b;
   --muted: #f4f4f5;
   --muted-foreground: #71717a;
-  --accent: #f97316;
-  --accent-foreground: #fff7ed;
+  --accent: #f0fdf4;
+  --accent-foreground: #166534;
   --destructive: #ef4444;
   --destructive-foreground: #fef2f2;
   --border: #e4e4e7;
@@ -48,7 +48,7 @@
   --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
   --gradient-mesh:
     radial-gradient(at 40% 20%, rgba(22, 163, 74, 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(249, 115, 22, 0.05) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(34, 197, 94, 0.05) 0px, transparent 50%),
     radial-gradient(at 0% 50%, rgba(34, 197, 94, 0.06) 0px, transparent 50%);
 
   /* Animation timing */
@@ -75,8 +75,8 @@
   --secondary-foreground: #fafafa;
   --muted: #27272a;
   --muted-foreground: #a1a1aa;
-  --accent: #fb923c;
-  --accent-foreground: #431407;
+  --accent: #14532d26;
+  --accent-foreground: #86efac;
   --destructive: #7f1d1d;
   --destructive-foreground: #fef2f2;
   --border: #27272a;

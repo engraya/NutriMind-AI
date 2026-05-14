@@ -237,7 +237,7 @@ export function GroceryListClient({ userId, activePlan, initialList }: GroceryLi
                       );
                       return (
                         <button
-                          key={`${item.name}-${item.category}`}
+                          key={`${item.ingredient}-${item.category}`}
                           onClick={() => toggleItem(globalIndex)}
                           className="w-full flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
                         >

@@ -88,7 +88,7 @@ export function LoginForm() {
       </div>
 
       {/* Google OAuth */}
-      <Button
+      {/* <Button
         variant="outline"
         className="w-full h-11"
         onClick={handleGoogleSignIn}
@@ -128,7 +128,7 @@ export function LoginForm() {
             or continue with email
           </span>
         </div>
-      </div>
+      </div> */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">

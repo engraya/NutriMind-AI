@@ -16,13 +16,22 @@ export default function DashboardError({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center">
+    <div className="flex flex-col items-center justify-center py-24 text-center px-4">
       <div className="w-16 h-16 rounded-2xl bg-destructive/10 flex items-center justify-center mb-4">
-        <AlertTriangle className="h-8 w-8 text-destructive" />
+        <AlertTriangle className="h-7 w-7 text-destructive" />
       </div>
-      <h2 className="text-lg font-semibold mb-1">Something went wrong</h2>
-      <p className="text-sm text-muted-foreground mb-4 max-w-sm">{error.message || "An unexpected error occurred."}</p>
-      <Button onClick={reset} variant="outline">Try again</Button>
+      <h2
+        className="text-xl font-bold mb-2"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        Something went wrong
+      </h2>
+      <p className="text-sm text-muted-foreground mb-6 max-w-xs leading-relaxed">
+        {error.message || "An unexpected error occurred. Your data is safe."}
+      </p>
+      <Button onClick={reset} variant="outline">
+        Try again
+      </Button>
     </div>
   );
 }

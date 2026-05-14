@@ -1,6 +1,5 @@
 "use client";
 
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity } from "lucide-react";
 
@@ -9,40 +8,38 @@ interface MacroBreakdownCardProps {
   targets: { protein: number; carbs: number; fat: number };
 }
 
-const MACRO_COLORS = {
-  protein: "#3b82f6",
-  carbs: "#f97316",
-  fat: "#a855f7",
-};
+const MACROS = [
+  { key: "protein" as const, label: "Protein", color: "#3b82f6", bg: "#3b82f615" },
+  { key: "carbs" as const, label: "Carbs", color: "#f97316", bg: "#f9731615" },
+  { key: "fat" as const, label: "Fat", color: "#a855f7", bg: "#a855f715" },
+];
 
 export function MacroBreakdownCard({ consumed, targets }: MacroBreakdownCardProps) {
-  const data = [
-    { name: "Protein", consumed: Math.round(consumed.protein), target: targets.protein, color: MACRO_COLORS.protein },
-    { name: "Carbs", consumed: Math.round(consumed.carbs), target: targets.carbs, color: MACRO_COLORS.carbs },
-    { name: "Fat", consumed: Math.round(consumed.fat), target: targets.fat, color: MACRO_COLORS.fat },
-  ];
-
   return (
-    <Card>
+    <Card className="border-t-2 border-t-blue-500 shadow-soft hover:shadow-medium transition-shadow duration-300">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <Activity className="h-4 w-4 text-brand-600" />
+          <Activity className="h-4 w-4 text-blue-500" />
           Macros Today
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3 mb-3">
-          {data.map((macro) => {
-            const percent = Math.min((macro.consumed / macro.target) * 100, 100);
+          {MACROS.map((macro) => {
+            const c = Math.round(consumed[macro.key]);
+            const t = targets[macro.key];
+            const percent = Math.min((c / t) * 100, 100);
             return (
-              <div key={macro.name} className="space-y-1">
+              <div key={macro.key} className="space-y-1">
                 <div className="flex justify-between text-xs">
-                  <span className="font-medium">{macro.name}</span>
-                  <span className="text-muted-foreground">{macro.consumed}g / {macro.target}g</span>
+                  <span className="font-medium">{macro.label}</span>
+                  <span className="text-muted-foreground tabular-nums">
+                    {c}g / {t}g
+                  </span>
                 </div>
                 <div className="h-2 bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full rounded-full transition-all duration-500"
+                    className="h-full rounded-full transition-all duration-700"
                     style={{ width: `${percent}%`, backgroundColor: macro.color }}
                   />
                 </div>
@@ -51,12 +48,19 @@ export function MacroBreakdownCard({ consumed, targets }: MacroBreakdownCardProp
           })}
         </div>
         <div className="grid grid-cols-3 gap-1 text-center">
-          {data.map((macro) => (
-            <div key={macro.name} className="p-2 rounded-lg" style={{ backgroundColor: `${macro.color}15` }}>
-              <p className="text-sm font-semibold" style={{ color: macro.color }}>
-                {macro.consumed}g
+          {MACROS.map((macro) => (
+            <div
+              key={macro.key}
+              className="p-2 rounded-lg"
+              style={{ backgroundColor: macro.bg }}
+            >
+              <p
+                className="text-sm font-semibold tabular-nums"
+                style={{ color: macro.color }}
+              >
+                {Math.round(consumed[macro.key])}g
               </p>
-              <p className="text-xs text-muted-foreground">{macro.name}</p>
+              <p className="text-xs text-muted-foreground">{macro.label}</p>
             </div>
           ))}
         </div>

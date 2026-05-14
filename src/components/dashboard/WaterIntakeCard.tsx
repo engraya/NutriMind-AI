@@ -15,7 +15,11 @@ interface WaterIntakeCardProps {
 
 const QUICK_AMOUNTS = [250, 500];
 
-export function WaterIntakeCard({ totalMl: initialTotal, goalMl, userId }: WaterIntakeCardProps) {
+export function WaterIntakeCard({
+  totalMl: initialTotal,
+  goalMl,
+  userId: _userId,
+}: WaterIntakeCardProps) {
   const [total, setTotal] = useState(initialTotal);
   const [isLogging, setIsLogging] = useState(false);
 
@@ -42,27 +46,31 @@ export function WaterIntakeCard({ totalMl: initialTotal, goalMl, userId }: Water
   };
 
   return (
-    <Card>
+    <Card className="border-t-2 border-t-cyan-500 shadow-soft hover:shadow-medium transition-shadow duration-300">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <Droplets className="h-4 w-4 text-blue-500" />
+          <Droplets className="h-4 w-4 text-cyan-500" />
           Water Intake
         </CardTitle>
       </CardHeader>
       <CardContent>
         {/* Water fill animation */}
         <div className="relative w-20 h-28 mx-auto mb-3">
-          <div className="absolute inset-0 rounded-2xl border-2 border-blue-200 overflow-hidden">
+          <div className="absolute inset-0 rounded-2xl border-2 border-cyan-200 dark:border-cyan-900 overflow-hidden">
             <motion.div
-              className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-blue-500 to-blue-400 opacity-80"
+              className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-cyan-500 to-cyan-400 opacity-80"
               initial={{ height: "0%" }}
               animate={{ height: `${percent}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-sm font-bold text-blue-700">{totalL}L</span>
-            <span className="text-xs text-blue-600">of {goalL}L</span>
+            <span className="text-sm font-bold text-cyan-700 dark:text-cyan-400 tabular-nums">
+              {totalL}L
+            </span>
+            <span className="text-xs text-cyan-600 dark:text-cyan-500">
+              of {goalL}L
+            </span>
           </div>
         </div>
 

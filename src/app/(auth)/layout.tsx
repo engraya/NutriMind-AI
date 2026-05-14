@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Leaf } from "lucide-react";
+import { AuthBrandPanel } from "@/components/auth/AuthBrandPanel";
 
 export const metadata: Metadata = {
   title: "NutriMind AI — Sign In",
@@ -10,22 +12,42 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-brand-50 via-white to-warm-50 p-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center">
-              <span className="text-white text-xl font-bold">N</span>
-            </div>
-            <span className="text-2xl font-bold text-foreground">NutriMind</span>
-            <span className="text-2xl font-bold text-brand-600">AI</span>
+    <div className="min-h-screen flex">
+      {/* Left panel — brand side (desktop only) */}
+      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden">
+        <AuthBrandPanel />
+      </div>
+
+      {/* Right panel — form side */}
+      <div className="flex-1 flex flex-col bg-background">
+        {/* Mobile logo bar */}
+        <div className="lg:hidden flex items-center gap-2 p-6 border-b border-border">
+          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
+            <Leaf className="h-3.5 w-3.5 text-white" />
           </div>
-          <p className="text-sm text-muted-foreground">
-            Your personal AI nutrition companion
+          <span className="font-bold text-sm">
+            NutriMind<span className="text-primary">AI</span>
+          </span>
+        </div>
+
+        {/* Form container */}
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
+          <div className="w-full max-w-sm">{children}</div>
+        </div>
+
+        {/* Legal footer */}
+        <div className="p-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            By continuing you agree to our{" "}
+            <a href="#" className="underline hover:text-foreground transition-colors">
+              Terms
+            </a>{" "}
+            and{" "}
+            <a href="#" className="underline hover:text-foreground transition-colors">
+              Privacy Policy
+            </a>
           </p>
         </div>
-        {children}
       </div>
     </div>
   );
